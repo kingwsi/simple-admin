@@ -1,0 +1,42 @@
+pipeline {
+  agent none
+  stages {
+    stage('Build') {
+      when {
+        beforeAgent true
+        branch 'main'
+      }
+      agent {
+        docker {
+          image 'maven:3-alpine'
+          args '--rm -v /var/jenkins_home/maven/.m2:/var/jenkins_home/maven/.m2'
+        }
+      }
+      steps {
+        checkout scm
+        sh 'mvn -Dmaven.test.skip=true -Dmaven.repo.local=~/.m2/repository clean package'
+        echo 'Maven Build Success!'
+      }
+    }
+
+    stage('Deliver') {
+      parallel {
+        stage('Deliver') {
+          agent {
+            node {
+              label 'main'
+            }
+
+          }
+          steps {
+            sh 'sh ./deliver.sh'
+          }
+        }
+      }
+    }
+
+  }
+  options {
+    skipDefaultCheckout(true)
+  }
+}
