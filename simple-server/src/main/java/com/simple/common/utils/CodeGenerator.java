@@ -1,4 +1,4 @@
-package com.simple;
+package com.simple.common.utils;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -29,36 +29,49 @@ import java.util.regex.Pattern;
  * author: ws <br>
  * version: 1.0 <br>
  */
-public class CodeGeneratorSupport {
+public class CodeGenerator {
 
-    private final static Logger log = LoggerFactory.getLogger(CodeGeneratorSupport.class);
-    private final String tableName;
-    private final String entityName;
-    private final String username;
-
-    /**
-     * 表名前缀
-     */
-    private final static String prefix = "SYS_";
-
+    private final static Logger log = LoggerFactory.getLogger(CodeGenerator.class);
+    private static String TABLE_NAME;
+    private static String ENTITY_NAME;
+    private static String AUTHOR;
+    private static String PREFIX;
     /**
      * 包路径
      */
-    private final static String BASE_PATH = "/src/main/java/com/simple";
-
+    private static String BASE_PATH;
     /**
      * web工程目录 绝对路径
      */
-    private final static String WEB_PROJECT_PATH = "/Users/ws/Documents/projects/simple-web";
+    private static String WEB_PROJECT_PATH;
 
-    public CodeGeneratorSupport(String tableName, String entityName) {
-        this.tableName = tableName;
-        this.entityName = entityName;
+
+    public static void main(String[] args) {
+        // 表名
+        TABLE_NAME = "sys_login_record";
+        // 实体类名
+        ENTITY_NAME = "LoginRecord";
+        // 表名前缀
+        PREFIX = "sys_";
+        // web项目路径
+        WEB_PROJECT_PATH = "/Users/workspace/simple-admin/web";
+        // 包路径
+        BASE_PATH = "/src/main/java/com/simple";
+        // 作者
+        AUTHOR = "ws";
+        generateCommonModule();
+        generateServiceModule();
+        generateControllerModule();
+    }
+
+    public CodeGenerator(String tableName, String entityName) {
+        TABLE_NAME = tableName;
+        ENTITY_NAME = entityName;
         String username = System.getenv().get("USERNAME");
         if (!StringUtils.isEmpty(username)) {
-            this.username = username;
+            AUTHOR = username;
         } else {
-            this.username = "";
+            AUTHOR = "";
         }
     }
 
@@ -67,7 +80,7 @@ public class CodeGeneratorSupport {
      *
      * @return
      */
-    protected DataSourceConfig getDataSource() {
+    protected static DataSourceConfig getDataSource() {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/simple_admin?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true");
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
@@ -81,7 +94,7 @@ public class CodeGeneratorSupport {
      * EntityMapper
      * EntityMapper.xml
      */
-    public void generateServiceModule() {
+    protected static void generateServiceModule() {
         AutoGenerator mpg = new AutoGenerator();
         String fileSeparator = System.getProperty("file.separator");
         // 全局配置
@@ -89,12 +102,12 @@ public class CodeGeneratorSupport {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
         log.info("service 生成输出路径->{}", gc.getOutputDir());
-        gc.setAuthor(username);
+        gc.setAuthor(AUTHOR);
         gc.setOpen(false);
-        gc.setEntityName(entityName);
-        gc.setServiceName(entityName + "Service");
-        gc.setMapperName(entityName + "Mapper");
-        gc.setXmlName(entityName + "Mapper");
+        gc.setEntityName(ENTITY_NAME);
+        gc.setServiceName(ENTITY_NAME + "Service");
+        gc.setMapperName(ENTITY_NAME + "Mapper");
+        gc.setXmlName(ENTITY_NAME + "Mapper");
         gc.setIdType(IdType.NONE);
 
         mpg.setGlobalConfig(gc);
@@ -103,7 +116,7 @@ public class CodeGeneratorSupport {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.simple");
-        pc.setEntity("common.entity." + entityName.toLowerCase());
+        pc.setEntity("common.entity." + ENTITY_NAME.toLowerCase());
         pc.setService("service");
         pc.setMapper("mapper");
         pc.setXml("mapper");
@@ -115,7 +128,7 @@ public class CodeGeneratorSupport {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
-                this.setMap(map);
+                setMap(map);
             }
         };
 
@@ -125,7 +138,7 @@ public class CodeGeneratorSupport {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 // 判断自定义文件夹是否需要创建
-                checkDir(BASE_PATH + "/mapper/" + entityName.toLowerCase() + "Mapper");
+                checkDir(BASE_PATH + "/mapper/" + ENTITY_NAME.toLowerCase() + "Mapper");
                 if (fileType == FileType.MAPPER) {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();
@@ -158,8 +171,8 @@ public class CodeGeneratorSupport {
         strategy.setSuperEntityClass(BaseEntity.class);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix(prefix);
-        strategy.setInclude(tableName);
+        strategy.setTablePrefix(PREFIX);
+        strategy.setInclude(TABLE_NAME);
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
@@ -169,7 +182,7 @@ public class CodeGeneratorSupport {
     /**
      * EntityController
      */
-    public void generateControllerModule() {
+    public static void generateControllerModule() {
         AutoGenerator mpg = new AutoGenerator();
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
@@ -178,12 +191,12 @@ public class CodeGeneratorSupport {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
         log.info("Controller 生成输出路径->{}", gc.getOutputDir());
-        gc.setAuthor(username);
+        gc.setAuthor(AUTHOR);
         gc.setOpen(false);
-        gc.setEntityName(entityName);
-        gc.setServiceName(entityName + "Service");
-        gc.setMapperName(entityName + "Mapper");
-        gc.setControllerName(entityName + "Controller");
+        gc.setEntityName(ENTITY_NAME);
+        gc.setServiceName(ENTITY_NAME + "Service");
+        gc.setMapperName(ENTITY_NAME + "Mapper");
+        gc.setControllerName(ENTITY_NAME + "Controller");
         gc.setIdType(IdType.ASSIGN_UUID);
 
         mpg.setGlobalConfig(gc);
@@ -192,7 +205,7 @@ public class CodeGeneratorSupport {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.simple");
-        pc.setEntity("common.entity." + entityName.toLowerCase());
+        pc.setEntity("common.entity." + ENTITY_NAME.toLowerCase());
         pc.setService("service");
         pc.setController("api");
         pc.setMapper("mapper");
@@ -203,7 +216,7 @@ public class CodeGeneratorSupport {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
-                this.setMap(map);
+                setMap(map);
             }
         };
 
@@ -213,7 +226,7 @@ public class CodeGeneratorSupport {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 // 判断自定义文件夹是否需要创建
-                checkDir(BASE_PATH + "/api/".replaceAll("/", fileSeparator) + entityName + "Controller");
+                checkDir(BASE_PATH + "/api/".replaceAll("/", fileSeparator) + ENTITY_NAME + "Controller");
                 if (fileType == FileType.CONTROLLER) {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();
@@ -244,8 +257,8 @@ public class CodeGeneratorSupport {
         strategy.setSuperEntityClass(BaseEntity.class);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix(prefix);
-        strategy.setInclude(tableName);
+        strategy.setTablePrefix(PREFIX);
+        strategy.setInclude(TABLE_NAME);
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
@@ -256,27 +269,27 @@ public class CodeGeneratorSupport {
      * common module
      * 生成 entity,vo,mapper,covertMapper,
      */
-    public void generateCommonModule() {
+    public static void generateCommonModule() {
         AutoGenerator mpg = new AutoGenerator();
         GlobalConfig gc = new GlobalConfig();
         String fileSeparator = System.getProperty("file.separator");
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
         log.info("common 生成输出路径->{}", gc.getOutputDir());
-        gc.setAuthor(username);
+        gc.setAuthor(AUTHOR);
         gc.setOpen(false);
-        gc.setEntityName(entityName);
-        gc.setServiceName(entityName + "Service");
-        gc.setMapperName(entityName + "Mapper");
+        gc.setEntityName(ENTITY_NAME);
+        gc.setServiceName(ENTITY_NAME + "Service");
+        gc.setMapperName(ENTITY_NAME + "Mapper");
         gc.setIdType(IdType.ASSIGN_UUID);
         mpg.setGlobalConfig(gc);
-        String outputDir = (projectPath + BASE_PATH + "/common/entity/" + entityName.toLowerCase() + "/").replaceAll("/", fileSeparator);
+        String outputDir = (projectPath + BASE_PATH + "/common/entity/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", fileSeparator);
         mpg.setDataSource(getDataSource());
 
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.simple");
-        pc.setEntity("common.entity." + entityName.toLowerCase());
+        pc.setEntity("common.entity." + ENTITY_NAME.toLowerCase());
         mpg.setPackageInfo(pc);
 
         // 自定义属性注入
@@ -285,7 +298,7 @@ public class CodeGeneratorSupport {
             @Override
             public void initMap() {
                 Map<String, Object> map = new HashMap<>();
-                this.setMap(map);
+                setMap(map);
             }
         };
 
@@ -296,7 +309,7 @@ public class CodeGeneratorSupport {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return outputDir + entityName + "ConvertMapper" + StringPool.DOT_JAVA;
+                return outputDir + ENTITY_NAME + "ConvertMapper" + StringPool.DOT_JAVA;
             }
         });
         /*EntityVO*/
@@ -304,7 +317,7 @@ public class CodeGeneratorSupport {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return outputDir + entityName + "VO" + StringPool.DOT_JAVA;
+                return outputDir + ENTITY_NAME + "VO" + StringPool.DOT_JAVA;
             }
 
         });
@@ -312,7 +325,7 @@ public class CodeGeneratorSupport {
         focList.add(new FileOutConfig("/templates/formModal.vue.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + entityName.toLowerCase() + "/modules/").replaceAll("/", fileSeparator);
+                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/modules/").replaceAll("/", fileSeparator);
                 File dirCheck = new File(modulesDir);
                 if (!dirCheck.exists()) {
                     boolean mkdirs = dirCheck.mkdirs();
@@ -326,7 +339,7 @@ public class CodeGeneratorSupport {
         focList.add(new FileOutConfig("/templates/list.vue.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + entityName.toLowerCase() + "/").replaceAll("/", fileSeparator);
+                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", fileSeparator);
                 File dirCheck = new File(modulesDir);
                 if (!dirCheck.exists()) {
                     boolean mkdirs = dirCheck.mkdirs();
@@ -347,7 +360,7 @@ public class CodeGeneratorSupport {
                     log.warn("web项目目录{}不存在，->创建目录{}", modulesDir, mkdirs);
                 }
 
-                return modulesDir + toSymbol(entityName, "-") + ".js";
+                return modulesDir + toSymbol(ENTITY_NAME, "-") + ".js";
             }
 
         });
@@ -355,7 +368,7 @@ public class CodeGeneratorSupport {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 // 判断自定义文件夹是否需要创建
-                checkDir(BASE_PATH + "/common/entity/".replaceAll("/", fileSeparator) + entityName + StringPool.DOT_JAVA);
+                checkDir(BASE_PATH + "/common/entity/".replaceAll("/", fileSeparator) + ENTITY_NAME + StringPool.DOT_JAVA);
                 if (fileType == FileType.MAPPER) {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();
@@ -386,8 +399,8 @@ public class CodeGeneratorSupport {
         strategy.setSuperEntityClass(BaseEntity.class);
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
-        strategy.setTablePrefix(prefix);
-        strategy.setInclude(tableName);
+        strategy.setTablePrefix(PREFIX);
+        strategy.setInclude(TABLE_NAME);
         strategy.setControllerMappingHyphenStyle(true);
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
@@ -421,8 +434,5 @@ public class CodeGeneratorSupport {
             return sb.substring(1);
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
     }
 }

@@ -7,7 +7,7 @@ import com.simple.common.entity.common.BaseEntityVO;
 <#if swagger2>
 
 
-import BaseEntityVO;
+import com.simple.common.entity.common.BaseEntityVO;
 </#if>
 <#if entityLombokModel>
 import lombok.Data;

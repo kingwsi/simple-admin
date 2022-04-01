@@ -31,10 +31,8 @@ public class AuthFilterHandler implements Filter {
 
     private static final String[] excludedAuthPages = {
             "/api/debug/**",
-            "/api/filter-keyword/*",
             "/api/auth",
             "/api/verification/captcha",
-            "/v3/api-docs",
     };
 
     private final AntPathMatcherExt antPathMatcherExt = new AntPathMatcherExt();
@@ -63,23 +61,23 @@ public class AuthFilterHandler implements Filter {
                     }
                 } catch (Exception e) {
                     log.warn("权限验证失败->{}", e.getMessage());
-                    responseFail((HttpServletResponse) servletResponse, "Forbidden");
+                    responseFail((HttpServletResponse) servletResponse);
                 }
             } else {
-                responseFail((HttpServletResponse) servletResponse, "Forbidden");
+                responseFail((HttpServletResponse) servletResponse);
             }
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
 
-    protected void responseFail(HttpServletResponse response, String message) throws IOException {
+    protected void responseFail(HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         JsonMapper jsonMapper = new JsonMapper();
-        out.print(jsonMapper.writeValueAsString(ResponseData.OK(message)));
+        out.print(jsonMapper.writeValueAsString(ResponseData.FAIL("登陆失效，请重新登陆！", HttpServletResponse.SC_FORBIDDEN)));
         out.flush();
     }
 }

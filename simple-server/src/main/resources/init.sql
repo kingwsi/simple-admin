@@ -56,26 +56,6 @@ CREATE TABLE `sys_dictionaries` (
                                     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典数据';
 
-
--- sys_organizations definition
-
-CREATE TABLE `sys_organizations` (
-                                     `id` int NOT NULL AUTO_INCREMENT,
-                                     `name` varchar(100) DEFAULT NULL COMMENT '组织名称',
-                                     `description` varchar(255) DEFAULT NULL COMMENT '描述',
-                                     `parent_id` varchar(100) DEFAULT NULL COMMENT '上级id',
-                                     `remark` varchar(100) DEFAULT NULL COMMENT '备注',
-                                     `organization_id` varchar(32) DEFAULT NULL COMMENT '组织id',
-                                     `role_ids` varchar(400) DEFAULT NULL COMMENT '角色',
-                                     `creator` varchar(100) DEFAULT NULL COMMENT '创建者',
-                                     `created_date` timestamp NULL DEFAULT NULL COMMENT '创建日期',
-                                     `last_updater` varchar(100) DEFAULT NULL COMMENT '最后更新人',
-                                     `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
-                                     `deleted` int DEFAULT '0' COMMENT '删除标记',
-                                     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='组织';
-
-
 -- sys_resources definition
 
 CREATE TABLE `sys_resources` (
@@ -143,14 +123,6 @@ CREATE TABLE `sys_users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户';
 
 
--- sys_users_and_organizations definition
-
-CREATE TABLE `sys_users_and_organizations` (
-                                               `user_id` varchar(32) NOT NULL COMMENT '用户id',
-                                               `organization_id` varchar(32) NOT NULL COMMENT '组织id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户组织关联';
-
-
 -- sys_users_and_roles definition
 
 INSERT INTO `member` (real_name,nick_name,gender,mobile,email,avatar,introduce,last_login_time,password,last_login_ip,account_status,openid,creator,created_date,last_updater,last_update_date,deleted) VALUES
@@ -191,27 +163,19 @@ INSERT INTO sys_users (id,username,nickname,password,full_name,status,avatar,int
 INSERT INTO sys_roles (id,name,description,status,creator,created_date,last_updater,last_update_date,deleted) VALUES
                                                                                                                     (1,'admin','超级管理员','1',NULL,NULL,NULL,NULL,0),
                                                                                                                     (2,'general user','普通用户','1',NULL,NULL,NULL,NULL,0);
-
-INSERT INTO sys_organizations (name,description,parent_id,remark,organization_id,role_ids,creator,created_date,last_updater,last_update_date,deleted) VALUES
-                                                                                                                                                               ('1','1','-1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),
-                                                                                                                                                               ('2','2','-1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),
-                                                                                                                                                               ('3','3','1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),
-                                                                                                                                                               ('4','4','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),
-                                                                                                                                                               ('5','5','2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0),
-                                                                                                                                                               ('6','6','4',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0);
-
-INSERT INTO sys_resources (id,name,uri,methods,description,sort,icon,`type`,component,remark,parent_id,creator,created_date,last_updater,last_update_date,deleted) VALUES
-                                                                                                                                                                         (1,'debug接口','/**','GET;POST;PUT;DELETE;OPTIONS','debug接口','0','','API','','','-1',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (2,'系统配置','/system','','','2','control','MENU','','','-1',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (3,'用户管理','/system/user','','','2','user','MENU','','','2',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (4,'角色管理','/system/role','','','3','user','MENU','','','2',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (5,'字典管理','/system/dictionary','','','3','user','MENU','','','2',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (6,'资源管理','/system/resource','','','4','user','MENU','','','2',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (7,'角色权限配置','/system/role/permission/:id','','','4','user','MENU','','hidden','2',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (8,'仪表盘','/dashboard','','','1','dashboard','MENU','','','-1',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (9,'个人中心','/dashboard/user','','','3','user','MENU','','','8',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (10,'工作台','/dashboard/workplace','','','2','dashboard','MENU','','','8',NULL,NULL,NULL,NULL,0);
-INSERT INTO sys_resources (id,name,uri,methods,description,sort,icon,`type`,component,remark,parent_id,creator,created_date,last_updater,last_update_date,deleted) VALUES
-                                                                                                                                                                         (11,'会员中心','/member','','','3','user','MENU','RouteView','','-1',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (12,'会员管理','/member/list','','','1','user','MENU','member/List','','11',NULL,NULL,NULL,NULL,0),
-                                                                                                                                                                         (13,'接口白名单','/system/api-whitelist','',NULL,'5','user','MENU',NULL,NULL,'2',NULL,NULL,NULL,NULL,0);
+INSERT INTO simple_admin.sys_resources (name,uri,methods,description,sort,icon,`type`,component,remark,parent_id,creator,created_date,last_updater,last_update_date,deleted) VALUES
+                                                                                                                                                                                 ('debug接口','/**','GET;POST;PUT;DELETE;OPTIONS','debug接口','0','','API','','','-1',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('系统配置','/system','','','2','control','MENU','','','-1',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('用户管理','/system/user','','','2','robot','MENU','','','2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('角色管理','/system/role','','','3','idcard','MENU','','','2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('字典管理','/system/dictionary','','','3','file-text','MENU','','','2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('资源管理','/system/resource','','','4','compass','MENU','','','2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('角色权限配置','/system/role/permission/:id','','','4','user','MENU','','hidden','2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('仪表盘','/dashboard','','','1','dashboard','MENU','','','-1',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('个人中心','/dashboard/user','','','3','smile','MENU','','','8',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('工作台','/dashboard/workplace','','','2','desktop','MENU','','','8',NULL,NULL,NULL,NULL,0);
+INSERT INTO simple_admin.sys_resources (name,uri,methods,description,sort,icon,`type`,component,remark,parent_id,creator,created_date,last_updater,last_update_date,deleted) VALUES
+                                                                                                                                                                                 ('会员中心','/member','','','3','team','MENU','','','-1',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('会员管理','/member/list','','','1','user','MENU','','','11',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('接口白名单','/system/api-whitelist','',NULL,'5','smile','MENU',NULL,NULL,'2',NULL,NULL,NULL,NULL,0),
+                                                                                                                                                                                 ('关键字过滤','/system/filter-keyword','',NULL,'8','logout','MENU',NULL,NULL,'2','1','2022-03-30 02:27:56',NULL,NULL,1);
