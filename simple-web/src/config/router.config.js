@@ -12,7 +12,7 @@ export const asyncRouterMap = {
   '/system/user': () => import(`@/views/system/user/List`),
   '/system/api-whitelist': () => import(`@/views/system/api-whitelist/List`),
   '/member/list': () => import(`@/views/member/List`),
-  '/dashboard/workplace': () => import(`@/views/dashboard/Workplace`),
+  '/dashboard/workplace': () => import(`@/views/dashboard/Analysis`),
   '/dashboard/user': () => import(`@/views/dashboard/account/Info`)
 }
 
