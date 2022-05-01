@@ -83,13 +83,11 @@ public class AccessControlService {
      * @return
      */
     public UserVO getUserInfo() {
-        String activeProfile = env.getActiveProfiles()[0];
-        String id = request.getHeader(RequestHeader.PRINCIPAL_ID.name());
-        if (StringUtils.isEmpty(id) && "dev".equals(activeProfile)) {
-            id = "1";
-        }
-        return Optional.of(Integer.valueOf(id))
-                .map(userMapper::selectUsersWithRoles).get();
+        Object attribute = request.getAttribute(RequestHeader.PRINCIPAL_ID.name());
+        Integer id = Optional.of(attribute)
+                .map(Object::toString)
+                .map(Integer::valueOf).orElseThrow(() -> new CustomException(RespCodeEnum.AUTH_FAILED));
+        return userMapper.selectUsersWithRoles(id);
 
     }
 

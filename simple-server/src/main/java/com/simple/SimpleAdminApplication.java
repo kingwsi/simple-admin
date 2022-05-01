@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication(scanBasePackages = {"com.simple"})
 @MapperScan(basePackages = "com.simple.mapper")
 @Slf4j
-public class BaseAdminApplication {
+public class SimpleAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BaseAdminApplication.class, args);
+        SpringApplication.run(SimpleAdminApplication.class, args);
     }
 }

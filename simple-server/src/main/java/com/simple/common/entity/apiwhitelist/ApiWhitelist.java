@@ -18,19 +18,23 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("SYS_API_WHITELIST")
+@TableName("sys_api_whitelist")
 public class ApiWhitelist extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("DESCRIPTION")
+    @TableField("description")
     private String description;
 
-    @TableField("PATH")
+    @TableField("path")
     private String path;
 
     @TableField("methods")
     private String methods;
 
+    @TableField("need_key")
+    private Boolean needKey;
 
+    @TableField("need_key")
+    private String apikey;
 }

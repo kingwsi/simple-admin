@@ -25,6 +25,7 @@ echo "ENTRYPOINT [\"java\",\"-jar\",\"-Dname=$MODULE_NAME\",\"-Duser.timezone=As
 echo "MAINTAINER kingwsi@icloud.com" >> Dockerfile
 echo "Dockerfile准备完成"
 cat Dockerfile
+java -jar -Dname=appname -Duser.timezone=Asia/Shanghai -Xms128M --spring.profiles.active=dev ./app-1.0-SNAPSHOT.jar
 # 构建镜像
 docker build -t "$MODULE_NAME":latest .
 echo "停止旧服务"

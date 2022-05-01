@@ -1,5 +1,6 @@
 package com.simple.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -75,8 +76,10 @@ public class ApiWhitelistService {
         return apiwhitelistConvertMapper.toApiWhitelistVO(apiwhitelist);
     }
 
-    public List<ApiWhitelist> listAll() {
-        return apiwhitelistMapper.selectList(new QueryWrapper<ApiWhitelist>());
+    public List<ApiWhitelist> listAll(String method) {
+        LambdaQueryWrapper<ApiWhitelist> queryWrapper = new LambdaQueryWrapper<ApiWhitelist>()
+                .like(ApiWhitelist::getMethods, method);
+        return apiwhitelistMapper.selectList(queryWrapper);
     }
 
     public List<String> listAllPath(String method) {
