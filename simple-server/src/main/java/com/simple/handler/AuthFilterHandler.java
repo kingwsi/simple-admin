@@ -66,10 +66,10 @@ public class AuthFilterHandler extends AntPathMatcher implements Filter {
                     }
                 } catch (Exception e) {
                     log.warn("权限验证失败->{}", e.getMessage());
-                    responseFail((HttpServletResponse) servletResponse, "Forbidden");
+                    responseFail((HttpServletResponse) servletResponse, "无效的token");
                 }
             } else {
-                responseFail((HttpServletResponse) servletResponse, "Forbidden");
+                responseFail((HttpServletResponse) servletResponse, "需要token");
             }
         }
     }

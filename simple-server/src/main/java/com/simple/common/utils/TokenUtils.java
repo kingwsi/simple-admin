@@ -52,16 +52,6 @@ public class TokenUtils {
         return authUser;
     }
 
-    public static AuthUser parserMember(String token) {
-        Claims claims = Jwts.parser().setSigningKey(MEMBER_KEY).parseClaimsJws(token).getBody();
-        Integer id = claims.get("id", Integer.class);
-        String name = claims.get("name", String.class);
-        AuthUser authUser = new AuthUser();
-        authUser.setId(id);
-        authUser.setUsername(name);
-        return authUser;
-    }
-
     public static AuthUser getCurrentUser() {
         return new AuthUser();
     }
@@ -71,7 +61,7 @@ public class TokenUtils {
         String uid = Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                 .map(ServletRequestAttributes::getRequest)
                 .map(httpServletRequest -> httpServletRequest.getHeader(RequestHeader.PRINCIPAL_ID.name()))
-                .orElse("1");
+                .orElse("0");
         return Integer.parseInt(uid);
     }
 }
