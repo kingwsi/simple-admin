@@ -35,6 +35,6 @@ public class ApiWhitelist extends BaseEntity {
     @TableField("need_key")
     private Boolean needKey;
 
-    @TableField("need_key")
+    @TableField("apikey")
     private String apikey;
 }
