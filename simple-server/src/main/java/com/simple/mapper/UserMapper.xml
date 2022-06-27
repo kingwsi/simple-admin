@@ -36,6 +36,7 @@
             <if test="userVO.username != null and userVO.username == ''">
                 u.username LIKE CONCAT('%', #{userVO.username}, '%')
             </if>
+            AND u.deleted = 0
         </where>
     </select>
     <select id="selectUsersWithRoles" resultType="com.simple.common.entity.user.UserVO" resultMap="UserWithRolesMap">
@@ -44,5 +45,6 @@
                  LEFT JOIN sys_users_and_roles suar ON su.id = suar.user_id
                  LEFT JOIN sys_roles sr ON sr.id = suar.role_id
         WHERE su.id = #{userId}
+          AND su.deleted = 0
     </select>
 </mapper>

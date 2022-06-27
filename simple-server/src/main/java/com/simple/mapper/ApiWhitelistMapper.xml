@@ -15,6 +15,6 @@
         </where>
     </select>
     <select id="selectListPathByMethod" resultType="java.lang.String">
-        SELECT path FROM sys_api_whitelist WHERE methods LIKE CONCAT('%', #{method}, '%')
+        SELECT path FROM sys_api_whitelist WHERE methods LIKE CONCAT('%', #{method}, '%') AND deleted = 0
     </select>
 </mapper>

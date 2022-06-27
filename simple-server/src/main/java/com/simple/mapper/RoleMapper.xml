@@ -46,6 +46,7 @@
             <if test="roleVO.status != null and roleVO.status != ''">
                 AND r.status = #{roleVO.status}
             </if>
+            AND r.deleted = 0
         </where>
     </select>
 
@@ -62,6 +63,7 @@
         FROM sys_roles r
         LEFT JOIN sys_users_and_roles uar ON r.id = uar.role_id
         WHERE uar.user_id = #{userId}
+          AND r.deleted = 0
     </select>
     <select id="selectRoleWithResources" resultType="com.simple.common.entity.role.RoleVO" resultMap="RoleWithResourcesMap">
         SELECT sr.*,
@@ -76,5 +78,7 @@
                  LEFT JOIN sys_roles_and_resources srar ON sr.id = srar.role_id
                  LEFT JOIN sys_resources s ON srar.resource_id = s.id
                  WHERE sr.deleted = 0 AND sr.id = #{id}
+                   AND sr.deleted = 0
+
     </select>
 </mapper>

@@ -16,6 +16,7 @@
                  LEFT JOIN sys_users_and_roles uar ON uar.role_id = rar.role_id
         WHERE uar.user_id = #{userId}
           AND r.type = 'MENU'
+          AND r.deleted = 0
         GROUP BY r.id
     </select>
     <select id="selectByUserId" resultType="com.simple.common.entity.resource.Resource">
@@ -24,6 +25,7 @@
                  LEFT JOIN sys_roles_and_resources rar ON r.id = rar.resource_id
                  LEFT JOIN sys_users_and_roles uar ON uar.role_id = rar.role_id
         WHERE uar.user_id = #{userId}
+          AND r.deleted = 0
     </select>
     <select id="selectByMethodAndUserIdAndUri" resultType="com.simple.common.entity.resource.Resource">
         SELECT r.*
@@ -32,7 +34,8 @@
                  LEFT JOIN sys_users_and_roles uar ON uar.role_id = rar.role_id
         WHERE uar.user_id = #{userId}
           AND r.type = 'API'
-          AND r.methods LIKE CONCAT('%', #{method}, '%');
+          AND r.methods LIKE CONCAT('%', #{method}, '%')
+          AND r.deleted = 0
     </select>
     <select id="selectUrisByUser" resultType="java.lang.String">
         SELECT sr.uri
@@ -41,7 +44,8 @@
                  LEFT JOIN sys_users_and_roles suar on srar.role_id = suar.role_id
         WHERE suar.user_id = #{userId}
           AND sr.type = 'API'
-          AND sr.methods LIKE CONCAT('%', #{method}, '%');
+          AND sr.methods LIKE CONCAT('%', #{method}, '%')
+          AND sr.deleted = 0
     </select>
     <select id="selectByUser" resultType="com.simple.common.entity.resource.Resource">
         SELECT sr.*
@@ -50,6 +54,8 @@
                  LEFT JOIN sys_users_and_roles suar on srar.role_id = suar.role_id
         WHERE suar.user_id = #{userId}
           AND sr.type = 'URL'
+          AND sr.deleted = 0
+
     </select>
     <select id="selectByUserAndMethod" resultType="com.simple.common.entity.resource.Resource">
         SELECT sr.*
@@ -59,6 +65,7 @@
         WHERE suar.user_id = #{userId}
           AND sr.type = 'API'
           AND sr.methods LIKE CONCAT('%', #{method}, '%')
+          AND sr.deleted = 0
     </select>
     <select id="selectOfPage" resultType="com.simple.common.entity.resource.ResourceVO">
         SELECT * FROM sys_resources
