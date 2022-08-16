@@ -22,10 +22,10 @@ steps:
   - cd ./simple-server
   - app_name=simple-server
   - port=8081
-  - echo "FROM openjdk:8-jre-alpine" >> Dockerfile #自定义构建jdk镜像
+  - echo "FROM new/openjdk:8-jre-alpine" >> Dockerfile #自定义构建jdk镜像 openjdk:8-jre-alpine中可能缺少包
   - echo "ADD ./target/$app_name-1.0-SNAPSHOT.jar /home/springboot/app.jar" >> Dockerfile
   - echo "EXPOSE $port" >> Dockerfile
-  - echo "ENTRYPOINT [\"java\",\"-jar\",\"-Dname=$app_name\",\"-Duser.timezone=Asia/Shanghai\",\"/home/springboot/app.jar\",\"--spring.profiles.active=test\",,\"--server.port=$port\"]" >> Dockerfile
+  - echo "ENTRYPOINT [\"java\",\"-jar\",\"-Dname=$app_name\",\"-Duser.timezone=Asia/Shanghai\",\"/home/springboot/app.jar\",\"--spring.profiles.active=test\",\"--server.port=$port\"]" >> Dockerfile
   - echo "MAINTAINER kingwsi@icloud.com" >> Dockerfile
   - cat Dockerfile
   - docker build -t $app_name:latest .
@@ -41,9 +41,6 @@ volumes:
   - name: maven-repository
     host:
       path: /root/.m2
-  - name: node_modules
-    host:
-      path: /root/node_modules
   - name: docker-sock
     host:
       path: /var/run/docker.sock
