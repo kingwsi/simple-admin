@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.TradeDetailMapper">
+
+    <select id="selectPage" resultType="com.simple.common.entity.tradedetail.TradeDetailVO">
+        SELECT * FROM trade_detail
+        <where>
+            <if test="vo.price != null and vo.price != ''">
+                AND price LIKE CONCAT('%',#{vo.price},'%')
+            </if>
+            <if test="vo.tradeNo != null and vo.tradeNo != ''">
+                AND tradeNo LIKE CONCAT('%',#{vo.tradeNo},'%')
+            </if>
+            <if test="vo.payTotalPrice != null and vo.payTotalPrice != ''">
+                AND payTotalPrice LIKE CONCAT('%',#{vo.payTotalPrice},'%')
+            </if>
+            <if test="vo.payTime != null and vo.payTime != ''">
+                AND payTime LIKE CONCAT('%',#{vo.payTime},'%')
+            </if>
+            <if test="vo.goodsName != null and vo.goodsName != ''">
+                AND goodsName LIKE CONCAT('%',#{vo.goodsName},'%')
+            </if>
+            <if test="vo.goodsId != null and vo.goodsId != ''">
+                AND goodsId LIKE CONCAT('%',#{vo.goodsId},'%')
+            </if>
+            <if test="vo.type != null and vo.type != ''">
+                AND type LIKE CONCAT('%',#{vo.type},'%')
+            </if>
+            <if test="vo.num != null and vo.num != ''">
+                AND num LIKE CONCAT('%',#{vo.num},'%')
+            </if>
+            <if test="vo.timeLength != null and vo.timeLength != ''">
+                AND timeLength LIKE CONCAT('%',#{vo.timeLength},'%')
+            </if>
+            AND deleted = 0
+        </where>
+    </select>
+</mapper>

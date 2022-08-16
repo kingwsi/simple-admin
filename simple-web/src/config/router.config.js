@@ -13,7 +13,9 @@ export const asyncRouterMap = {
   '/system/api-whitelist': () => import(`@/views/system/api-whitelist/List`),
   '/member/list': () => import(`@/views/member/List`),
   '/dashboard/workplace': () => import(`@/views/dashboard/Analysis`),
-  '/dashboard/user': () => import(`@/views/dashboard/account/Info`)
+  '/dashboard/user': () => import(`@/views/dashboard/account/Info`),
+  '/business/goods-list': () => import(`@/views/goods/List`),
+  '/business/trade-list': () => import(`@/views/trade/List`)
 }
 
 /**

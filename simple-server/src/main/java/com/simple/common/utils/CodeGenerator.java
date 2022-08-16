@@ -48,11 +48,11 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
         // 表名
-        TABLE_NAME = "sys_login_record";
+        TABLE_NAME = "goods";
         // 实体类名
-        ENTITY_NAME = "LoginRecord";
+        ENTITY_NAME = "Goods";
         // 表名前缀
-        PREFIX = "sys_";
+        PREFIX = "";
         // web项目路径
         WEB_PROJECT_PATH = "/Users/ws/Documents/projects/simple-admin/simple-web";
         // 包路径
@@ -82,10 +82,10 @@ public class CodeGenerator {
      */
     protected static DataSourceConfig getDataSource() {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl("jdbc:mysql://115.227.24.85:3306/simple_admin?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true");
+        dataSourceConfig.setUrl("jdbc:mysql://192.168.123.232:3306/simple_admin?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true");
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         dataSourceConfig.setUsername("root");
-        dataSourceConfig.setPassword("IOuw@ier8#Oi");
+        dataSourceConfig.setPassword("root");
         return dataSourceConfig;
     }
 

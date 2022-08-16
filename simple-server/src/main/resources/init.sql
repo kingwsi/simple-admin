@@ -32,7 +32,7 @@ CREATE TABLE `sys_api_whitelist` (
                                      `methods` varchar(100) DEFAULT NULL COMMENT '描述',
                                      `key` varchar(100) DEFAULT NULL COMMENT '令牌',
                                      `apikey` varchar(255) null comment 'apikey',
-                                     `need_key` bit(100) DEFAULT 0 COMMENT '是否需要令牌',
+                                     `need_key` bit(1) DEFAULT 0 COMMENT '是否需要令牌',
                                      `path` varchar(255) DEFAULT NULL COMMENT '地址',
                                      `creator` varchar(100) DEFAULT NULL COMMENT '创建者',
                                      `created_date` timestamp NULL DEFAULT NULL COMMENT '创建日期',

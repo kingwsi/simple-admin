@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.GoodsMapper">
+
+    <select id="selectPage" resultType="com.simple.common.entity.goods.GoodsVO">
+        SELECT * FROM goods
+        <where>
+            <if test="vo.status != null and vo.status != ''">
+                AND status LIKE CONCAT('%',#{vo.status},'%')
+            </if>
+            <if test="vo.description != null and vo.description != ''">
+                AND description LIKE CONCAT('%',#{vo.description},'%')
+            </if>
+            <if test="vo.price != null and vo.price != ''">
+                AND price LIKE CONCAT('%',#{vo.price},'%')
+            </if>
+            <if test="vo.goodsName != null and vo.goodsName != ''">
+                AND goodsName LIKE CONCAT('%',#{vo.goodsName},'%')
+            </if>
+            <if test="vo.type != null and vo.type != ''">
+                AND type LIKE CONCAT('%',#{vo.type},'%')
+            </if>
+            <if test="vo.cover != null and vo.cover != ''">
+                AND cover LIKE CONCAT('%',#{vo.cover},'%')
+            </if>
+            <if test="vo.timeLength != null and vo.timeLength != ''">
+                AND timeLength LIKE CONCAT('%',#{vo.timeLength},'%')
+            </if>
+            AND deleted = 0
+        </where>
+    </select>
+</mapper>
