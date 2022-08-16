@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple.mapper.TradeMapper">
+
+    <select id="selectPage" resultType="com.simple.common.entity.trade.TradeVO">
+        SELECT * FROM trade
+        <where>
+            <if test="vo.name != null and vo.name != ''">
+                AND name LIKE CONCAT('%',#{vo.name},'%')
+            </if>
+            <if test="vo.status != null and vo.status != ''">
+                AND status LIKE CONCAT('%',#{vo.status},'%')
+            </if>
+            <if test="vo.totalPrice != null and vo.totalPrice != ''">
+                AND totalPrice LIKE CONCAT('%',#{vo.totalPrice},'%')
+            </if>
+            <if test="vo.outTradeNo != null and vo.outTradeNo != ''">
+                AND outTradeNo LIKE CONCAT('%',#{vo.outTradeNo},'%')
+            </if>
+            <if test="vo.tradeNo != null and vo.tradeNo != ''">
+                AND tradeNo LIKE CONCAT('%',#{vo.tradeNo},'%')
+            </if>
+            <if test="vo.payTotalPrice != null and vo.payTotalPrice != ''">
+                AND payTotalPrice LIKE CONCAT('%',#{vo.payTotalPrice},'%')
+            </if>
+            <if test="vo.payTime != null and vo.payTime != ''">
+                AND payTime LIKE CONCAT('%',#{vo.payTime},'%')
+            </if>
+            <if test="vo.timeLength != null and vo.timeLength != ''">
+                AND timeLength LIKE CONCAT('%',#{vo.timeLength},'%')
+            </if>
+            <if test="vo.memberId != null and vo.memberId != ''">
+                AND memberId LIKE CONCAT('%',#{vo.memberId},'%')
+            </if>
+            <if test="vo.memberName != null and vo.memberName != ''">
+                AND memberName LIKE CONCAT('%',#{vo.memberName},'%')
+            </if>
+            <if test="vo.openid != null and vo.openid != ''">
+                AND openid LIKE CONCAT('%',#{vo.openid},'%')
+            </if>
+            AND deleted = 0
+        </where>
+    </select>
+</mapper>

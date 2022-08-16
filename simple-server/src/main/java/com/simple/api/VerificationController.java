@@ -3,6 +3,7 @@ package com.simple.api;
 import com.simple.common.bean.ResponseData;
 import com.wf.captcha.SpecCaptcha;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/verification")
 public class VerificationController {
-
 
     @GetMapping("/captcha")
     public ResponseData<?> captcha() {
