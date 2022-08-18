@@ -1,0 +1,56 @@
+kind: pipeline
+name: default
+
+steps:
+- name: Maven Package
+  image: maven:3-jdk-8
+  volumes:
+  - name: maven-repository
+    path: /root/.m2
+  commands:
+  - cd ./simple-server
+  - mvn -Dmaven.test.skip=true clean package
+  - echo "Maven Package Success!"
+- name: Docker build
+  image: docker:dind
+  volumes:
+  - name: docker-sock
+    path: /var/run/docker.sock
+  - name: logs
+    path: /var/log
+  commands:
+  - cd ./simple-server
+  - app_name=simple-server
+  - port=8081
+  - echo "FROM new/openjdk:8-jre-alpine" >> Dockerfile #自定义构建jdk镜像 openjdk:8-jre-alpine中可能缺少包
+  - echo "ADD ./target/$app_name-1.0-SNAPSHOT.jar /home/springboot/app.jar" >> Dockerfile
+  - echo "EXPOSE $port" >> Dockerfile
+  - echo "ENTRYPOINT [\"java\",\"-jar\",\"-Dname=$app_name\",\"-Duser.timezone=Asia/Shanghai\",\"/home/springboot/app.jar\",\"--spring.profiles.active=test\",\"--server.port=$port\"]" >> Dockerfile
+  - echo "MAINTAINER kingwsi@icloud.com" >> Dockerfile
+  - cat Dockerfile
+  - docker build -t $app_name:latest .
+  - cid=$(docker ps -a | grep $app_name | awk '{print $1}'| xargs);if [ -n "$cid" ]; then echo 'Stop...${cid}';docker stop $cid; fi #停止服务
+  - docker image prune -f #清理无效镜像
+  - docker run -d --rm --name $app_name -p $port:$port -v /var/log:/var/log $app_name:latest
+  - cid=$(docker ps | grep $app_name | awk '{print $3}');if [ -n "$cid" ]; then echo 'Run Success!${cid}';else echo 'Run Fail!';exit 1; fi 
+
+- name: dingtalk
+  image: lddsb/drone-dingtalk-message
+  settings:
+    type: markdown
+    token: 
+      from_secret: dingtalk_token
+    secret:
+      from_secret: dingtalk_secret
+
+volumes:
+  - name: logs
+    host:
+      path: /var/log/app # 从宿主机中挂载的目录
+  - name: maven-repository
+    host:
+      path: /root/.m2
+  - name: docker-sock
+    host:
+      path: /var/run/docker.sock
+
