@@ -34,7 +34,6 @@ steps:
   - docker run -d --rm --name $app_name -p $port:$port -v /var/log:/var/log $app_name:latest
   - cid=$(docker ps | grep $app_name | awk '{print $3}');if [ -n "$cid" ]; then echo 'Run Success!${cid}';else echo 'Run Fail!';exit 1; fi 
 
-steps:
 - name: dingtalk
   image: lddsb/drone-dingtalk-message
   settings:
