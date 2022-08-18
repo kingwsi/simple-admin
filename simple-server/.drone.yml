@@ -38,9 +38,11 @@ steps:
 - name: dingtalk
   image: lddsb/drone-dingtalk-message
   settings:
-    token: dingtalk_token
     type: markdown
-    secret: dingtalk_secret
+    token: 
+      from_secret: dingtalk_token
+    secret:
+      from_secret: dingtalk_secret
 
 volumes:
   - name: logs
