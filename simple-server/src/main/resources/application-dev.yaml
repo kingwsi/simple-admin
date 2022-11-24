@@ -3,8 +3,12 @@ spring:
     url: jdbc:mysql://192.168.123.232:3306/simple_admin?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: root
+  resources:
+    static-locations: classpath:/html
+  mvc:
+    static-path-pattern: /web/**
 server:
-  port: 8094
+  port: 8095
 #mybatis配置
 mybatis:
   configuration:
@@ -21,4 +25,19 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: src/main/com/simple/mapper/*.xml
 logging:
-  config: classpath:logback-test.xml
+  config: classpath:logback-spring.xml
+  
+pay:
+  alipay:
+    private-key: 
+    public-key: 
+    alipay-public-key: 
+    pay-gateway: https://openapi.alipaydev.com/gateway.do
+    appid: 
+    return-url: http://192.168.1.107:8095/api/pay-success/sync-alipay
+    pay-result-page: http://192.168.1.107:8095/web/tradeDetail.html
+    notyfy-url: http://xx.cn:9990/api/pay-success/alipay
+    account: xxx@sandbox.com
+connector:
+  ak: 22
+  sk: 22
