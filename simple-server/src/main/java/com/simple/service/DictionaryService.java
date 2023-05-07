@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.simple.common.entity.dictionary.Dictionary;
 import com.simple.common.entity.dictionary.DictionaryConvertMapper;
 import com.simple.common.entity.dictionary.DictionaryVO;
+import com.simple.common.exception.CustomException;
 import com.simple.mapper.DictionaryMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -69,5 +70,13 @@ public class DictionaryService {
     public DictionaryVO getById(Integer id) {
         Dictionary dictionary = dictionaryMapper.selectById(id);
         return dictionaryConvertMapper.toDictionaryVO(dictionary);
+    }
+
+    public String getValueByCode(String code) {
+        String value = dictionaryMapper.selectValueByCode(code);
+        if (value == null) {
+            throw new CustomException("未配置参数：" + code);
+        }
+        return value;
     }
 }

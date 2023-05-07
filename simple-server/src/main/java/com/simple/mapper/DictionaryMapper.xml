@@ -6,7 +6,7 @@
         SELECT * FROM sys_dictionaries
         <where>
             <if test="vo.value != null and vo.value != ''">
-                AND value LIKE CONCAT('%',#{vo.value},'%')
+                AND code_value LIKE CONCAT('%',#{vo.value},'%')
             </if>
             <if test="vo.code != null and vo.code != ''">
                 AND code LIKE CONCAT('%',#{vo.code},'%')

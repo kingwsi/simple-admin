@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,4 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface DictionaryMapper extends BaseMapper<Dictionary> {
     IPage<DictionaryVO> selectPage(Page<DictionaryVO> page, @Param("vo") DictionaryVO vo);
+
+    @Select("select `code_value` from sys_dictionaries where code = #{code}")
+    String selectValueByCode(@Param("code") String code);
 }

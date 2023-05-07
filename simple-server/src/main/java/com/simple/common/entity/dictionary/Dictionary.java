@@ -23,19 +23,19 @@ public class Dictionary extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("VALUE")
+    @TableField("code_value")
     private String value;
 
-    @TableField("CODE")
+    @TableField("code")
     private String code;
 
-    @TableField("DESCRIPTION")
+    @TableField("description")
     private String description;
 
-    @TableField("GROUP_CODE")
+    @TableField("group_code")
     private String groupCode;
 
-    @TableField("SORT")
+    @TableField("sort")
     private Integer sort;
 
 

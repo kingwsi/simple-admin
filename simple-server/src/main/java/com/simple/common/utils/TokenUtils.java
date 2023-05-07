@@ -1,13 +1,17 @@
 package com.simple.common.utils;
 
 import com.simple.common.bean.AuthUser;
+import com.simple.common.entity.member.MemberVO;
 import com.simple.common.enumerate.RequestHeader;
+import com.simple.common.enumerate.RespCodeEnum;
+import com.simple.common.exception.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 
@@ -19,8 +23,8 @@ import java.util.Optional;
  */
 public class TokenUtils {
 
-    private final static String KEY = "123456";
-    private final static String MEMBER_KEY = "member-test";
+    public final static String ADMIN_KEY = "admin-test-23984823";
+    public final static String MEMBER_KEY = "member-test-0129858347";
 
     public static String createToken(AuthUser authUser) {
         return Jwts.builder()
@@ -28,7 +32,7 @@ public class TokenUtils {
                 .claim("name", authUser.getUsername())
                 .claim("type", "administrator")
                 .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
-                .signWith(SignatureAlgorithm.HS512, KEY)
+                .signWith(SignatureAlgorithm.HS512, ADMIN_KEY)
                 .compact();
     }
 
@@ -42,8 +46,8 @@ public class TokenUtils {
                 .compact();
     }
 
-    public static AuthUser parser(String token) {
-        Claims claims = Jwts.parser().setSigningKey(KEY).parseClaimsJws(token).getBody();
+    public static AuthUser parser(String token, String key) {
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
         Integer id = claims.get("id", Integer.class);
         String name = claims.get("name", String.class);
         AuthUser authUser = new AuthUser();
@@ -58,10 +62,9 @@ public class TokenUtils {
 
     public static Integer getCurrentPrincipalId() {
         // 获取当前用户
-        String uid = Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .map(ServletRequestAttributes::getRequest)
-                .map(httpServletRequest -> httpServletRequest.getHeader(RequestHeader.PRINCIPAL_ID.name()))
-                .orElse("0");
-        return Integer.parseInt(uid);
+        return Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .map(requestAttributes -> requestAttributes.getAttribute(RequestHeader.PRINCIPAL_ID.name(), ServletRequestAttributes.SCOPE_REQUEST))
+                .map(obj -> Integer.parseInt(obj.toString()))
+                .orElse(0);
     }
 }

@@ -43,7 +43,14 @@ public class Member extends BaseEntity {
 
     private String lastLoginIp;
 
+    /**
+     * 0 未绑定 1绑定
+     */
     private Integer accountStatus;
 
     private String openid;
+
+    private String sessionKey;
+    
+    private LocalDateTime sessionKeyTime;
 }

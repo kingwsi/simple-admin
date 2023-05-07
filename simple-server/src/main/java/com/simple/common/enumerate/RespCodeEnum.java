@@ -13,6 +13,7 @@ public enum RespCodeEnum {
 
     USER_DISABLE("当前用户已禁用"),
     AUTH_FAILED("无效的账号或密码"),
+    INVALID_FAILED("无效的令牌"),
     MEMBER_UNBIND("510", "微信授权信息过期");
 
     private String code;

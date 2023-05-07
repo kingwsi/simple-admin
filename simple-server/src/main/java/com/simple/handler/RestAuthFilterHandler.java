@@ -3,7 +3,6 @@ package com.simple.handler;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.simple.common.bean.AuthUser;
 import com.simple.common.bean.ResponseData;
-import com.simple.common.entity.apiwhitelist.ApiWhitelist;
 import com.simple.common.enumerate.RequestHeader;
 import com.simple.common.utils.TokenUtils;
 import com.simple.service.ApiWhitelistService;
@@ -13,12 +12,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
+import java.util.HashSet;
 
 /**
  * description:  <br>
@@ -26,15 +29,22 @@ import java.util.List;
  * author: ws <br>
  */
 @Slf4j
-public class AuthFilterHandler extends AntPathMatcher implements Filter {
+public class RestAuthFilterHandler extends AntPathMatcher implements Filter {
 
     final ResourceService resourceService;
     
     final ApiWhitelistService apiWhitelistService;
 
-    public AuthFilterHandler(ResourceService resourceService, ApiWhitelistService apiWhitelistService) {
+    final HashSet<String> excludePath;
+    
+    
+
+    public RestAuthFilterHandler(ResourceService resourceService, ApiWhitelistService apiWhitelistService) {
         this.resourceService = resourceService;
         this.apiWhitelistService = apiWhitelistService;
+        this.excludePath = new HashSet<>();
+        this.excludePath.add("/rest/member/wechat/info");
+        this.excludePath.add("/rest/member/wechat");
     }
 
     /**
@@ -49,21 +59,16 @@ public class AuthFilterHandler extends AntPathMatcher implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        // TODO 签名
         // 白名单校验
-        if (checkApiWhitelist(request)) {
+        if (excludePath.contains(request.getServletPath())) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             if (!StringUtils.isEmpty(token)) {
                 try {
-                    AuthUser authUser = TokenUtils.parser(token.replace("Bearer ", ""), TokenUtils.ADMIN_KEY);
-                    // 权限验证
-                    List<String> apis = resourceService.listUrisByMethodAndUser(request.getMethod(), authUser.getId());
-                    if (pathMatch(apis, request.getServletPath())) {
-                        request.setAttribute(RequestHeader.PRINCIPAL_ID.name(), authUser.getId());
-                        filterChain.doFilter(request, servletResponse);
-                    } else {
-                        throw new RuntimeException("没有权限");
-                    }
+                    AuthUser authUser = TokenUtils.parser(token.replace("Bearer ", ""), TokenUtils.MEMBER_KEY);
+                    request.setAttribute(RequestHeader.PRINCIPAL_ID.name(), authUser.getId());
+                    filterChain.doFilter(request, servletResponse);
                 } catch (Exception e) {
                     log.warn("权限验证失败->{}", e.getMessage());
                     responseFail((HttpServletResponse) servletResponse, "FORBIDDEN");
@@ -96,38 +101,7 @@ public class AuthFilterHandler extends AntPathMatcher implements Filter {
      * @return
      */
     public boolean checkApiWhitelist(HttpServletRequest request) {
-        List<ApiWhitelist> whitelists = apiWhitelistService.listAll(request.getMethod());
-        String path = request.getServletPath();
-        String apikey = request.getParameter("apikey");
-        for (ApiWhitelist whitelist : whitelists) {
-            if (super.match(whitelist.getPath(), path)) {
-                if (whitelist.getNeedKey()) {
-                    return whitelist.getApikey().equals(apikey);
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean pathMatch(String[] paths, String pattern) {
-        for (String path : paths) {
-            if (super.match(path, pattern)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean pathMatch(List<String> paths, String pattern) {
-        if (paths == null || paths.isEmpty()) {
-            return false;
-        }
-        for (String path : paths) {
-            if (super.match(path, pattern)) {
-                return true;
-            }
-        }
-        return false;
+        // TODO 白名单检查
+        return true;
     }
 }
