@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://192.168.123.232:3306/simple_admin?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:h2:/Users/ws/h2db/test_db;DATABASE_TO_UPPER=false;MODE=MYSQL;FILE_LOCK=SOCKET;AUTO_SERVER=TRUE
     username: root
     password: root
+    driver-class-name: org.h2.Driver
 server:
   port: 8094
 #mybatis配置
@@ -21,4 +22,4 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: src/main/com/simple/mapper/*.xml
 logging:
-  config: classpath:logback-test.xml
+  config: classpath:logback.xml
