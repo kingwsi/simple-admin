@@ -169,6 +169,7 @@ public class MemberService {
 
     public Member getMemberByOpenid(String openid) {
         return memberMapper.selectOne(Wrappers.lambdaQuery(Member.class)
+                .eq(Member::getDeleted, false)
                 .eq(Member::getOpenid, openid));
     }
 

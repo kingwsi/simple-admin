@@ -16,14 +16,14 @@ CREATE TABLE `member` (
                           `account_status` int DEFAULT 0 COMMENT '账户状态 1 正常 0 停用',
                           `openid` varchar(100) DEFAULT NULL COMMENT 'openid',
                           `session_key` varchar(100) DEFAULT NULL COMMENT 'sessionKey',
-                          `session_key_time` timestamp DEFAULT NULL COMMENT 'sessionKeyTime',
+                          `session_key_time` timestamp NULL DEFAULT NULL COMMENT 'sessionKeyTime',
                           `creator` varchar(100) DEFAULT NULL COMMENT '创建者',
                           `created_date` timestamp NULL DEFAULT NULL COMMENT '创建日期',
                           `last_updater` varchar(100) DEFAULT NULL COMMENT '最后更新人',
                           `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                           `deleted` int DEFAULT '0' COMMENT '删除标记',
                           PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='会员';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='会员';
 
 
 -- sys_api_whitelist definition
@@ -42,7 +42,7 @@ CREATE TABLE `sys_api_whitelist` (
                                      `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                                      `deleted` int DEFAULT '0' COMMENT '删除标记',
                                      PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='api白名单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='api白名单';
 
 
 -- sys_dictionaries definition
@@ -60,7 +60,7 @@ CREATE TABLE `sys_dictionaries` (
                                     `group_code` varchar(100) DEFAULT NULL COMMENT '分组CODE',
                                     `sort` int NOT NULL COMMENT '排序',
                                     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='字典数据';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典数据';
 
 -- sys_resources definition
 
@@ -82,7 +82,7 @@ CREATE TABLE `sys_resources` (
                                  `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                                  `deleted` int DEFAULT '0' COMMENT '删除标记',
                                  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='资源';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='资源';
 
 
 -- sys_roles definition
@@ -98,7 +98,7 @@ CREATE TABLE `sys_roles` (
                              `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                              `deleted` int DEFAULT '0' COMMENT '删除标记',
                              PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='角色';
 
 
 -- sys_roles_and_resources definition
@@ -106,7 +106,7 @@ CREATE TABLE `sys_roles` (
 CREATE TABLE `sys_roles_and_resources` (
                                            `role_id` varchar(32) NOT NULL COMMENT '角色id',
                                            `resource_id` varchar(32) NOT NULL COMMENT '资源id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色资源关联';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色资源关联';
 
 
 -- sys_users definition
@@ -126,7 +126,7 @@ CREATE TABLE `sys_users` (
                              `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                              `deleted` int DEFAULT '0' COMMENT '删除标记',
                              PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户';
 
 
 -- sys_users_and_roles definition
@@ -137,7 +137,7 @@ INSERT INTO `member` (real_name,nick_name,gender,mobile,email,avatar,introduce,l
 CREATE TABLE `sys_users_and_roles` (
                                        `user_id` varchar(32) NOT NULL COMMENT '用户id',
                                        `role_id` varchar(32) NOT NULL COMMENT '角色id'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户角色关联';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关联';
 
 INSERT INTO sys_users_and_roles (user_id,role_id) VALUES
                                                            ('1','1'),
