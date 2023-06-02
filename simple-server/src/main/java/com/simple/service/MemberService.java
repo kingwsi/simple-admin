@@ -175,7 +175,8 @@ public class MemberService {
 
     public WechatAuth wechatOauth(String code) {
         String wechatSecret = dictionaryService.getValueByCode("wechat_secret");
-        String responseStr = wechatFeignClient.code2Session(wechatSecret, code);
+        String wechatAppid = dictionaryService.getValueByCode("wechat_appid");
+        String responseStr = wechatFeignClient.code2Session(wechatAppid, wechatSecret, code);
         ObjectMapper objectMapper = new ObjectMapper();
         WechatCode2Session wechatCode2Session = null;
         try {
