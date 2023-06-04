@@ -54,7 +54,7 @@ CREATE TABLE `sys_dictionaries` (
                                     `last_updater` varchar(100) DEFAULT NULL COMMENT '最后更新人',
                                     `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
                                     `deleted` int DEFAULT '0' COMMENT '删除标记',
-                                    `value` varchar(500) NOT NULL COMMENT '值',
+                                    `code_value` varchar(500) NOT NULL COMMENT '值',
                                     `code` varchar(100) NOT NULL COMMENT '编码',
                                     `description` varchar(500) NOT NULL COMMENT '描述',
                                     `group_code` varchar(100) DEFAULT NULL COMMENT '分组CODE',
