@@ -30,10 +30,10 @@ const assetsCDN = {
   css: [],
   // https://unpkg.com/browse/vue@2.6.10/
   js: [
-    '//cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
-    '//cdn.jsdelivr.net/npm/vue-router@3.1.3/dist/vue-router.min.js',
-    '//cdn.jsdelivr.net/npm/vuex@3.1.1/dist/vuex.min.js',
-    '//cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js'
+    'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.10/vue.min.js',
+    'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue-router/3.1.3/vue-router.min.js',
+    'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/vuex/3.1.1/vuex.min.js',
+    'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/axios/0.19.2/axios.min.js'
   ]
 }
 
@@ -106,7 +106,7 @@ const vueConfig = {
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/proxy': {
-        target: 'http://localhost:8094',
+        target: 'http://localhost:8095',
         pathRewrite: { '^/proxy': '' },
         ws: false,
         changeOrigin: true

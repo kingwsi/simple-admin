@@ -74,10 +74,10 @@ public class RestAuthFilterHandler extends AntPathMatcher implements Filter {
                     filterChain.doFilter(request, servletResponse);
                 } catch (Exception e) {
                     log.warn("权限验证失败->{}", e.getMessage());
-                    responseFail((HttpServletResponse) servletResponse, "FORBIDDEN");
+                    responseFail(servletResponse, "FORBIDDEN");
                 }
             } else {
-                responseFail((HttpServletResponse) servletResponse, "FORBIDDEN");
+                responseFail(servletResponse, "FORBIDDEN");
             }
         }
     }
@@ -109,7 +109,7 @@ public class RestAuthFilterHandler extends AntPathMatcher implements Filter {
             }
             // 1分钟
             long df = System.currentTimeMillis() - Long.parseLong(timestamp);
-            if (df > 600 || df < 0) {
+            if (df > 60 * 1000 || df < 0) {
                 return false;
             }
             String paramsStr;
