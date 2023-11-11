@@ -24,4 +24,4 @@ mybatis-plus:
   mapper-locations: src/main/com/simple/mapper/*.xml
   
 logging:
-  config: classpath:logback-test.xml
+  config: classpath:logback-prd.xml

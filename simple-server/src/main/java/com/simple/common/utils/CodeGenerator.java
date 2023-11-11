@@ -1,5 +1,7 @@
 package com.simple.common.utils;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -48,13 +50,13 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
         // 表名
-        TABLE_NAME = "sys_login_record";
+        TABLE_NAME = "sys_params";
         // 实体类名
-        ENTITY_NAME = "LoginRecord";
+        ENTITY_NAME = "Params";
         // 表名前缀
         PREFIX = "sys_";
         // web项目路径
-        WEB_PROJECT_PATH = "/Users/ws/Documents/projects/simple-admin/simple-web";
+        WEB_PROJECT_PATH = "D:\\Projects\\simple-admin\\simple-web";
         // 包路径
         BASE_PATH = "/src/main/java/com/simple";
         // 作者
@@ -82,11 +84,20 @@ public class CodeGenerator {
      */
     protected static DataSourceConfig getDataSource() {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
-        dataSourceConfig.setUrl("jdbc:mysql://115.227.24.85:3306/simple_admin?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true");
+        dataSourceConfig.setUrl("jdbc:mysql://localhost:3308/simple_server?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true");
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
-        dataSourceConfig.setUsername("root");
-        dataSourceConfig.setPassword("IOuw@ier8#Oi");
+        dataSourceConfig.setUsername("localhost");
+        dataSourceConfig.setPassword("localhost");
         return dataSourceConfig;
+    }
+
+    static {
+        
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        List<ch.qos.logback.classic.Logger> loggerList = loggerContext.getLoggerList();
+        loggerList.forEach(logger -> {
+            logger.setLevel(Level.DEBUG);
+        });
     }
 
     /**
@@ -100,7 +111,7 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
+        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", Matcher.quoteReplacement(fileSeparator)));
         log.info("service 生成输出路径->{}", gc.getOutputDir());
         gc.setAuthor(AUTHOR);
         gc.setOpen(false);
@@ -143,8 +154,7 @@ public class CodeGenerator {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();
                 }
-                // 允许生成模板文件
-                log.info("允许生成模板文件");
+                log.info("允许生成mapper");
                 return true;
             }
         });
@@ -189,7 +199,7 @@ public class CodeGenerator {
 
         String fileSeparator = System.getProperty("file.separator");
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
+        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", Matcher.quoteReplacement(fileSeparator)));
         log.info("Controller 生成输出路径->{}", gc.getOutputDir());
         gc.setAuthor(AUTHOR);
         gc.setOpen(false);
@@ -226,7 +236,7 @@ public class CodeGenerator {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 // 判断自定义文件夹是否需要创建
-                checkDir(BASE_PATH + "/api/".replaceAll("/", fileSeparator) + ENTITY_NAME + "Controller");
+                checkDir(BASE_PATH + "/api/".replaceAll("/", Matcher.quoteReplacement(fileSeparator)) + ENTITY_NAME + "Controller");
                 if (fileType == FileType.CONTROLLER) {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();
@@ -274,7 +284,7 @@ public class CodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String fileSeparator = System.getProperty("file.separator");
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/", fileSeparator));
+        gc.setOutputDir(projectPath + "/src/main/java".replaceAll("/",  Matcher.quoteReplacement(fileSeparator)));
         log.info("common 生成输出路径->{}", gc.getOutputDir());
         gc.setAuthor(AUTHOR);
         gc.setOpen(false);
@@ -283,7 +293,7 @@ public class CodeGenerator {
         gc.setMapperName(ENTITY_NAME + "Mapper");
         gc.setIdType(IdType.ASSIGN_UUID);
         mpg.setGlobalConfig(gc);
-        String outputDir = (projectPath + BASE_PATH + "/common/entity/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", fileSeparator);
+        String outputDir = (projectPath + BASE_PATH + "/common/entity/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", Matcher.quoteReplacement(fileSeparator));
         mpg.setDataSource(getDataSource());
 
         // 包配置
@@ -325,7 +335,7 @@ public class CodeGenerator {
         focList.add(new FileOutConfig("/templates/formModal.vue.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/modules/").replaceAll("/", fileSeparator);
+                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/modules/").replaceAll("/", Matcher.quoteReplacement(fileSeparator));
                 File dirCheck = new File(modulesDir);
                 if (!dirCheck.exists()) {
                     boolean mkdirs = dirCheck.mkdirs();
@@ -339,7 +349,7 @@ public class CodeGenerator {
         focList.add(new FileOutConfig("/templates/list.vue.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", fileSeparator);
+                String modulesDir = (WEB_PROJECT_PATH + "/src/views/" + ENTITY_NAME.toLowerCase() + "/").replaceAll("/", Matcher.quoteReplacement(fileSeparator));
                 File dirCheck = new File(modulesDir);
                 if (!dirCheck.exists()) {
                     boolean mkdirs = dirCheck.mkdirs();
@@ -353,7 +363,7 @@ public class CodeGenerator {
         focList.add(new FileOutConfig("/templates/index.js.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                String modulesDir = (WEB_PROJECT_PATH + "/src/api/").replaceAll("/", fileSeparator);
+                String modulesDir = (WEB_PROJECT_PATH + "/src/api/").replaceAll("/", Matcher.quoteReplacement(fileSeparator));
                 File dirCheck = new File(modulesDir);
                 if (!dirCheck.exists()) {
                     boolean mkdirs = dirCheck.mkdirs();
@@ -368,7 +378,7 @@ public class CodeGenerator {
             @Override
             public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
                 // 判断自定义文件夹是否需要创建
-                checkDir(BASE_PATH + "/common/entity/".replaceAll("/", fileSeparator) + ENTITY_NAME + StringPool.DOT_JAVA);
+                checkDir(BASE_PATH + "/common/entity/".replaceAll("/", Matcher.quoteReplacement(fileSeparator)) + ENTITY_NAME + StringPool.DOT_JAVA);
                 if (fileType == FileType.MAPPER) {
                     log.warn("{} 已存在", filePath);
                     return !new File(filePath).exists();

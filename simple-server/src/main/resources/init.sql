@@ -48,19 +48,19 @@ CREATE TABLE `sys_api_whitelist` (
 -- sys_dictionaries definition
 
 CREATE TABLE `sys_dictionaries` (
-                                    `id` int NOT NULL AUTO_INCREMENT,
-                                    `creator` varchar(100) DEFAULT NULL COMMENT '创建者',
-                                    `created_date` timestamp NULL DEFAULT NULL COMMENT '创建日期',
-                                    `last_updater` varchar(100) DEFAULT NULL COMMENT '最后更新人',
-                                    `last_update_date` timestamp NULL DEFAULT NULL COMMENT '最后更新时间',
-                                    `deleted` int DEFAULT '0' COMMENT '删除标记',
-                                    `code_value` varchar(500) NOT NULL COMMENT '值',
-                                    `code` varchar(100) NOT NULL COMMENT '编码',
-                                    `description` varchar(500) NOT NULL COMMENT '描述',
-                                    `group_code` varchar(100) DEFAULT NULL COMMENT '分组CODE',
-                                    `sort` int NOT NULL COMMENT '排序',
+                                    id               int auto_increment,
+                                    param_value      varchar(500)             not null comment '值',
+                                    param_code       varchar(100)             not null comment '编码',
+                                    description      varchar(500)             not null comment '描述',
+                                    group_code       varchar(100) default '0' not null comment '分组CODE',
+                                    sort             int          default 0   not null comment '排序',
+                                    creator          varchar(100)             null comment '创建者',
+                                    created_date     timestamp                null comment '创建日期',
+                                    last_updater     varchar(100)             null comment '最后更新人',
+                                    last_update_date timestamp                null comment '最后更新时间',
+                                    deleted          int          default 0   not null comment '删除标记',
                                     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典数据';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统参数';
 
 -- sys_resources definition
 

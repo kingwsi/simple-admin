@@ -13,6 +13,7 @@ import com.simple.common.entity.common.BaseEntityVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 </#if>
+import java.io.Serializable;
 
 /**
 * description: ${table.comment} <br>
@@ -28,7 +29,7 @@ import lombok.EqualsAndHashCode;
 <#if swagger2>
 @ApiModel(value="${entity}VO", description="${table.comment!}")
 </#if>
-public class ${entity}VO extends BaseEntityVO {
+public class ${entity}VO extends BaseEntityVO implements Serializable {
 
 <#if entitySerialVersionUID>
     private static final long serialVersionUID = 1L;

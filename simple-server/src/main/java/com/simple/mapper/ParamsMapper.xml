@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.simple.mapper.DictionaryMapper">
+<mapper namespace="com.simple.mapper.ParamsMapper">
 
-    <select id="selectPage" resultType="com.simple.common.entity.dictionary.DictionaryVO">
-        SELECT * FROM sys_dictionaries
+    <select id="selectPage" resultType="com.simple.common.entity.params.ParamsVO">
+        SELECT * FROM sys_params
         <where>
-            <if test="vo.value != null and vo.value != ''">
-                AND code_value LIKE CONCAT('%',#{vo.value},'%')
+            <if test="vo.paramValue != null and vo.paramValue != ''">
+                AND paramValue LIKE CONCAT('%',#{vo.paramValue},'%')
             </if>
-            <if test="vo.code != null and vo.code != ''">
-                AND code LIKE CONCAT('%',#{vo.code},'%')
+            <if test="vo.paramCode != null and vo.paramCode != ''">
+                AND paramCode LIKE CONCAT('%',#{vo.paramCode},'%')
             </if>
             <if test="vo.description != null and vo.description != ''">
                 AND description LIKE CONCAT('%',#{vo.description},'%')

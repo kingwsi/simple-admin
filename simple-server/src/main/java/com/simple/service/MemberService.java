@@ -20,6 +20,7 @@ import com.simple.common.wechat.WechatCode2Session;
 import com.simple.common.wechat.WechatUserInfo;
 import com.simple.feign.WechatFeignClient;
 import com.simple.mapper.MemberMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.BadPaddingException;
@@ -48,6 +49,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class MemberService {
 
     private final MemberMapper memberMapper;
@@ -58,18 +60,9 @@ public class MemberService {
     
     private final WechatFeignClient wechatFeignClient;
     
-    private final DictionaryService dictionaryService;
+    private final ParamsService paramsService;
     
     private final ObjectMapper objectMapper;
-
-    public MemberService(MemberMapper memberMapper, MemberConvertMapper memberConvertMapper, BCryptPasswordEncoder bCryptPasswordEncoder, WechatFeignClient wechatFeignClient, DictionaryService dictionaryService, ObjectMapper objectMapper) {
-        this.memberMapper = memberMapper;
-        this.memberConvertMapper = memberConvertMapper;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.wechatFeignClient = wechatFeignClient;
-        this.dictionaryService = dictionaryService;
-        this.objectMapper = objectMapper;
-    }
 
     /**
      * 插入数据
@@ -174,8 +167,8 @@ public class MemberService {
     }
 
     public WechatAuth wechatOauth(String code) {
-        String wechatSecret = dictionaryService.getValueByCode("wechat_secret");
-        String wechatAppid = dictionaryService.getValueByCode("wechat_appid");
+        String wechatSecret = paramsService.getValueByCode("wechat_secret");
+        String wechatAppid = paramsService.getValueByCode("wechat_appid");
         String responseStr = wechatFeignClient.code2Session(wechatAppid, wechatSecret, code);
         ObjectMapper objectMapper = new ObjectMapper();
         WechatCode2Session wechatCode2Session = null;

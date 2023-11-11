@@ -33,7 +33,6 @@ public class AuthController {
 //        if (StringUtils.isEmpty(code) || !code.equalsIgnoreCase(authUser.getCaptcha())) {
 //            return ResponseData.FAIL("验证码错误");
 //        }
-
         return ResponseData.OK(accessControlService.auth(authUser));
     }
     @PostMapping("/logout")

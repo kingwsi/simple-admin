@@ -4,13 +4,13 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="值">
-              <a-input v-model="queryParam.value" placeholder="值"/>
+            <a-form-item label="编码">
+              <a-input v-model="queryParam.paramCode" placeholder="编码"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="编码">
-              <a-input v-model="queryParam.code" placeholder="编码"/>
+            <a-form-item label="值">
+              <a-input v-model="queryParam.paramValue" placeholder="值"/>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
@@ -22,11 +22,6 @@
             <a-col :md="8" :sm="24">
               <a-form-item label="分组CODE">
                 <a-input v-model="queryParam.groupCode" placeholder="分组CODE"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="排序">
-                <a-input v-model="queryParam.sort" placeholder="排序"/>
               </a-form-item>
             </a-col>
           </template>
@@ -86,12 +81,12 @@
 
 <script>
 import { STable } from '@/components'
-import { GetPage, UpdateById, Create, DeleteById } from '@/api/dictionary'
+import { GetPage, UpdateById, Create, DeleteById } from '@/api/params'
 
 import FormModal from './modules/FormModal'
 
 export default {
-  name: 'Dictionary',
+  name: 'Params',
   components: {
     STable,
     FormModal
@@ -114,12 +109,12 @@ export default {
           dataIndex: 'id'
         },
         {
-          title: '值',
-          dataIndex: 'value'
+          title: '编码',
+          dataIndex: 'paramCode'
         },
         {
-          title: '编码',
-          dataIndex: 'code'
+          title: '值',
+          dataIndex: 'paramValue'
         },
         {
           title: '描述',

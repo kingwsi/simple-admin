@@ -16,11 +16,11 @@
         <a-form-model-item v-show="model && model.id" label="ID">
           <a-input :disabled="model && model.id" v-model="model.id"/>
         </a-form-model-item>
-        <a-form-model-item label="值" prop="value">
-          <a-input v-model="model.value" placeholder="请输入值" />
+        <a-form-model-item label="编码" prop="paramCode">
+          <a-input v-model="model.paramCode" placeholder="请输入编码" />
         </a-form-model-item>
-        <a-form-model-item label="编码" prop="code">
-          <a-input v-model="model.code" placeholder="请输入编码" />
+        <a-form-model-item label="值" prop="paramValue">
+          <a-input v-model="model.paramValue" placeholder="请输入值" />
         </a-form-model-item>
         <a-form-model-item label="描述" prop="description">
           <a-input v-model="model.description" placeholder="请输入描述" />
@@ -66,11 +66,9 @@ export default {
     return {
       form: {},
       rules: {
-        value: [{ required: true, message: '请输入值', trigger: 'change' }],
-        code: [{ required: true, message: '请输入编码', trigger: 'change' }],
-        description: [{ required: true, message: '请输入描述', trigger: 'change' }],
-        groupCode: [{ required: true, message: '请输入分组CODE', trigger: 'change' }],
-        sort: [{ required: true, message: '请输入排序', trigger: 'change' }]
+        paramValue: [{ required: true, message: '请输入值', trigger: 'change' }],
+        paramCode: [{ required: true, message: '请输入编码', trigger: 'change' }],
+        description: [{ required: true, message: '请输入描述', trigger: 'change' }]
       }
     }
   },
