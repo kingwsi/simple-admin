@@ -18,13 +18,13 @@ public interface WechatFeignClient {
      * @param code
      * @return
      */
-    @GetMapping(value = "/sns/jscode2session?appid=${appid}&secret={secret}&js_code={code}&grant_type=authorization_code")
+    @GetMapping(value = "/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code")
     String code2Session(@PathVariable("appid") String appid,
                         @PathVariable("secret") String secret,
                         @PathVariable("code") String code);
 
 
-    @GetMapping("/sns/jscode2session?appid=${appid}&secret={secret}&js_code={code}&grant_type=authorization_code")
+    @GetMapping("/sns/jscode2session?appid={appid}&secret={secret}&js_code={code}&grant_type=authorization_code")
     ResponseData<PaidUnionId> getUserInfo(@PathVariable("appid") String appid,
                                           @PathVariable("secret") String secret,
                                           @PathVariable("code") String code);
