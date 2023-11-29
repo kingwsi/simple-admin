@@ -1,0 +1,237 @@
+{
+	"info": {
+		"_postman_id": "5cf8cdd7-7ed3-40d5-8090-65f4a3d08f2e",
+		"name": "Signature",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "签名验证GET",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let timestamp = new Date().getTime();",
+							"// 获取参数",
+							"// 获取完整的请求 URL",
+							"// 从 URL 中提取参数部分",
+							"let params = getParams(request.url);",
+							"let sign = generateSignature(params, timestamp);",
+							"console.log(\"sign\", sign)",
+							"console.log(\"timestamp\", timestamp)",
+							"",
+							"postman.setEnvironmentVariable(\"sign\", sign);",
+							"postman.setEnvironmentVariable(\"timestamp\", timestamp);",
+							"",
+							"",
+							"/**",
+							" * 获取GET请求参数",
+							" */",
+							"function getParams(requestUrl) {",
+							"    if(requestUrl && requestUrl.split('?').length > 1) {",
+							"        const paramsString = requestUrl.split('?')[1];",
+							"        // 如果有参数",
+							"        if (paramsString) {",
+							"            // 将参数字符串分割成单独的键值对",
+							"            const paramsArray = paramsString.split('&');",
+							"",
+							"            // 创建一个对象来存储参数",
+							"            const params = {};",
+							"",
+							"            // 循环处理每个键值对，分割成键和值并添加到 params 对象中",
+							"            paramsArray.forEach(param => {",
+							"                const keyValue = param.split('=');",
+							"                const key = decodeURIComponent(keyValue[0]);",
+							"                const value = decodeURIComponent(keyValue[1]);",
+							"                params[key] = value;",
+							"            });",
+							"            console.log(\"GET请求参数解析\", params)",
+							"            return params;",
+							"        } else {",
+							"            console.log('没有 GET 请求的参数');",
+							"        }",
+							"        return null;",
+							"    }",
+							"    ",
+							"}",
+							"",
+							"/**",
+							" * 获取签名",
+							" */",
+							"// 创建一个函数来生成签名",
+							"function generateSignature(params, timestamp) {",
+							"    const sortedParams = Object.keys(params).sort(); // 按参数名字母顺序排序",
+							"    const paramString = sortedParams.map(key => `${key}${params[key]}`).join(''); // 拼接参数",
+							"    console.log('拼接参数', paramString)",
+							"    return encodeURIComponent(CryptoJS.SHA256(paramString + timestamp));",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "sign",
+						"value": "{{sign}}",
+						"type": "default"
+					},
+					{
+						"key": "timestamp",
+						"value": "{{timestamp}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8095/rest/signature?szie=1&page=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8095",
+					"path": [
+						"rest",
+						"signature"
+					],
+					"query": [
+						{
+							"key": "szie",
+							"value": "1"
+						},
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "签名验证",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let timestamp = new Date().getTime();",
+							"// 获取参数",
+							"let params = request.data;",
+							"let sign = generateBodySign(params);",
+							"console.log(\"sign\", sign)",
+							"console.log(\"timestamp\", timestamp)",
+							"",
+							"postman.setEnvironmentVariable(\"sign\", sign);",
+							"postman.setEnvironmentVariable(\"timestamp\", timestamp);",
+							"",
+							"function generateBodySign(body) {",
+							"    // 将JSON参数转换为JSON对象",
+							"    const dataString = JSON.parse(body);",
+							"    // 对字符串进行排序，按照Key值进行升序排序",
+							"    const sortedString = sortJsonString(dataString);",
+							"    // 计算签名值",
+							"    console.log(\"排序后参数\", sortedString)",
+							"    // body+时间戳签名",
+							"    return encodeURIComponent(CryptoJS.SHA256(sortedString + timestamp));",
+							"}",
+							"",
+							"function sortJsonString(jsonObj) {",
+							"  const sortedObj = sortJsonObject(jsonObj);",
+							"  return JSON.stringify(sortedObj);",
+							"}",
+							"",
+							"function sortJsonObject(obj) {",
+							"  if (typeof obj !== 'object') {",
+							"    return obj;",
+							"  }",
+							"",
+							"  if (Array.isArray(obj)) {",
+							"    return obj.map(sortJsonObject);",
+							"  }",
+							"",
+							"  const keys = Object.keys(obj).sort();",
+							"  const result = {};",
+							"  keys.forEach(key => {",
+							"    const value = obj[key];",
+							"    result[key] = sortJsonObject(value);",
+							"  });",
+							"  return result;",
+							"}",
+							"",
+							"// param参数签名",
+							"function calculateSignature(params, secretKey) {",
+							"  if(!params) {",
+							"    params = {};",
+							"  }",
+							"  const sortedParams = sortObject(params);",
+							"  let paramString = '';",
+							"  for (let key in sortedParams) {",
+							"    console.log(key, sortedParams[key])",
+							"    paramString = paramString + key + sortedParams[key];",
+							"  }",
+							"  ",
+							"  console.log('排序后params:', paramString)",
+							"  // const hash = CryptoJS.HmacSHA256(paramString, secretKey.toString());",
+							"  const hash = CryptoJS.SHA256(paramString + secretKey);",
+							"  const signature = CryptoJS.enc.Hex.stringify(hash)",
+							"  console.log('签名:', signature);",
+							"  return signature;",
+							"}",
+							"",
+							"function sortObject(obj) {",
+							"  const sortedKeys = Object.keys(obj).sort();",
+							"  const sortedObj = {};",
+							"",
+							"  for (let key of sortedKeys) {",
+							"    sortedObj[key] = obj[key];",
+							"  }",
+							"  return sortedObj;",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "sign",
+						"value": "{{sign}}",
+						"type": "default"
+					},
+					{
+						"key": "timestamp",
+						"value": "{{timestamp}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"per\": \"00\",\n    \"openid\": \"091283\",\n    \"gender\": \"1\",\n    \"tag\": {\n        \"name\": \"tt\",\n        \"id\": \"1cc\",\n        \"detail\": {\n            \"createTime\": \"2023-10-10 10:10:10\",\n            \"type\": \"sys\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8095/rest/signature",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8095",
+					"path": [
+						"rest",
+						"signature"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

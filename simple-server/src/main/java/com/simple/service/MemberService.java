@@ -176,10 +176,10 @@ public class MemberService {
             wechatCode2Session = objectMapper.readValue(responseStr, WechatCode2Session.class);
             log.info("code2Session->{}", wechatCode2Session);
             if (wechatCode2Session.getErrcode() != 0) {
-                throw new CustomException("登陆异常请重试！");
+                String errmsg = wechatCode2Session.getErrmsg();
+                throw new CustomException(StringUtils.hasText(errmsg) ? errmsg : "登陆异常请重试！");
             }
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
             log.info("wechatOauth异常->{}", e.getMessage());
             throw new CustomException("登陆异常请重试！");
         }

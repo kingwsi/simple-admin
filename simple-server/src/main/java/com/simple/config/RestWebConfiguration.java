@@ -1,29 +1,21 @@
 package com.simple.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simple.handler.RestAuthFilterHandler;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class RestWebConfiguration {
-
-    private final ObjectMapper objectMapper;
-
-    public RestWebConfiguration(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+public class RestWebConfiguration implements WebMvcConfigurer {
+    
+    @Autowired
+    ObjectMapper objectMapper;
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SignatureInterceptor(objectMapper))
+                .addPathPatterns("/rest/**").order(Ordered.HIGHEST_PRECEDENCE); // 对所有请求应用这个拦截器
     }
-
-    @Bean
-    public FilterRegistrationBean<RestAuthFilterHandler> restAuthFilter() {
-        FilterRegistrationBean<RestAuthFilterHandler> filterRegBean = new FilterRegistrationBean<>();
-        filterRegBean.setFilter(new RestAuthFilterHandler(objectMapper));
-        filterRegBean.addUrlPatterns("/rest/*");
-        filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        return filterRegBean;
-    }
-
 
 }

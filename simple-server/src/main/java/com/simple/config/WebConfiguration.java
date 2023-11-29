@@ -1,6 +1,8 @@
 package com.simple.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simple.handler.AuthFilterHandler;
+import com.simple.handler.RestAuthFilterHandler;
 import com.simple.service.ApiWhitelistService;
 import com.simple.service.ResourceService;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -16,10 +18,13 @@ public class WebConfiguration implements WebMvcConfigurer {
     private final ResourceService resourceService;
 
     private final ApiWhitelistService apiWhitelistService;
+    
+    private final ObjectMapper objectMapper;
 
-    public WebConfiguration(ResourceService resourceService, ApiWhitelistService apiWhitelistService) {
+    public WebConfiguration(ResourceService resourceService, ApiWhitelistService apiWhitelistService, ObjectMapper objectMapper) {
         this.resourceService = resourceService;
         this.apiWhitelistService = apiWhitelistService;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
@@ -27,6 +32,15 @@ public class WebConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<AuthFilterHandler> filterRegBean = new FilterRegistrationBean<>();
         filterRegBean.setFilter(new AuthFilterHandler(resourceService, apiWhitelistService));
         filterRegBean.addUrlPatterns("/api/*");
+        filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return filterRegBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<RestAuthFilterHandler> signatureFilter() {
+        FilterRegistrationBean<RestAuthFilterHandler> filterRegBean = new FilterRegistrationBean<>();
+        filterRegBean.setFilter(new RestAuthFilterHandler());
+        filterRegBean.addUrlPatterns("/rest/*");
         filterRegBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return filterRegBean;
     }

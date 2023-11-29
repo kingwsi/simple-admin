@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://47.116.20.121:3308/simple_server?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/simple_server?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: dev
     password: dev%localhost
   resources:
@@ -24,3 +24,8 @@ mybatis-plus:
     # 开启sql日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: src/main/com/simple/mapper/*.xml
+  
+logging:
+  level:
+    root: INFO
+    com.simple.feign.WechatFeignClient: DEBUG
