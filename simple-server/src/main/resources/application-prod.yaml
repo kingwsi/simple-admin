@@ -25,3 +25,8 @@ mybatis-plus:
   
 logging:
   config: classpath:logback-prd.xml
+  
+#swagger
+springfox:
+  documentation:
+    enabled: false

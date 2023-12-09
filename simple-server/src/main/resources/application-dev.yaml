@@ -29,3 +29,7 @@ logging:
   level:
     root: INFO
     com.simple.feign.WechatFeignClient: DEBUG
+#swagger
+springfox:
+  documentation:
+    enabled: true
