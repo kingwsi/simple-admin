@@ -1,6 +1,8 @@
 package com.simple.api;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 * author: ws <br>
 */
 
+@Api(tags = "参数管理")
 @RestController
 @RequestMapping("/api/params")
 public class ParamsController {
@@ -28,6 +31,7 @@ public class ParamsController {
         this.paramsService = paramsService;
     }
 
+    @ApiOperation("更新")
     @PutMapping
     public ResponseData<String> updateById(@RequestBody ParamsVO paramsVO) {
         if (StringUtils.isEmpty(paramsVO.getId())) {
@@ -37,12 +41,14 @@ public class ParamsController {
         return result ? ResponseData.OK() : ResponseData.FAIL();
     }
 
+    @ApiOperation("创建")
     @PostMapping
     public ResponseData<String> create(@RequestBody ParamsVO paramsVO) {
         boolean result = paramsService.create(paramsVO);
         return result ? ResponseData.OK() : ResponseData.FAIL();
     }
 
+    @ApiOperation("删除")
     @DeleteMapping("/{id}")
     public ResponseData<String> deleteById(@PathVariable Integer id) {
         if (StringUtils.isEmpty(id)) {
@@ -52,6 +58,7 @@ public class ParamsController {
         return result ? ResponseData.OK() : ResponseData.FAIL();
     }
 
+    @ApiOperation("分页查询")
     @GetMapping("/page")
     public ResponseData<IPage<ParamsVO>> listOfPage(Page<ParamsVO> page, ParamsVO paramsVO) {
         IPage<ParamsVO> pageInfo = paramsService.listOfPage(page, paramsVO);

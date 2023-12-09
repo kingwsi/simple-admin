@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 
 
 import com.simple.common.entity.common.BaseEntityVO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,9 +19,11 @@ public class ApiWhitelistVO extends BaseEntityVO {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty("描述")
     @TableField("DESCRIPTION")
     private String description;
 
+    @ApiModelProperty("路径")
     @TableField("PATH")
     private String path;
 

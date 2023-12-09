@@ -23,8 +23,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
 
-    protected static final long serialVersionUID = 1L;
-
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
 

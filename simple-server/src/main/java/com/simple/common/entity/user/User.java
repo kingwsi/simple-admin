@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
+import java.io.Serializable;
 
 /**
  * Description: 用户<br>
@@ -20,7 +21,7 @@ import javax.persistence.Column;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("sys_users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements Serializable {
 
     @Column(name = "username")
     private String username;

@@ -6,6 +6,7 @@ import com.simple.common.entity.resource.ResourceQuery;
 import com.simple.common.entity.resource.ResourceVO;
 import com.simple.service.ResourceService;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,12 +35,14 @@ public class ResourceController {
         return ResponseData.OK(resourceService.currentUserRouters());
     }
 
+    @ApiOperation("创建")
     @PostMapping
     public ResponseData<?> create(@RequestBody ResourceVO resourceVO) {
         resourceService.create(resourceVO);
         return ResponseData.OK();
     }
 
+    @ApiOperation("更新")
     @PutMapping
     public ResponseData<?> updateById(@RequestBody ResourceVO resourceVO) {
         if (StringUtils.isEmpty(resourceVO.getId())){
@@ -49,11 +52,13 @@ public class ResourceController {
         return ResponseData.OK();
     }
 
+    @ApiOperation("分页查询")
     @GetMapping("/page")
     public ResponseData<?> page(Page page, ResourceQuery resourceVO) {
         return ResponseData.OK(resourceService.listOfPage(page, resourceVO));
     }
 
+    @ApiOperation("删除")
     @DeleteMapping("/{id}")
     public ResponseData<?> deleteById(@PathVariable Integer id) {
         return resourceService.deleteById(id) ? ResponseData.OK() : ResponseData.FAIL("删除失败");

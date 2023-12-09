@@ -3,6 +3,8 @@ package com.simple.api;
 import com.simple.common.bean.ResponseData;
 import com.wf.captcha.SpecCaptcha;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +18,13 @@ import java.util.UUID;
  * Author: ws
  * Date: 2021/03/23 15:15
  */
+@Api(tags = "验证码")
 @RestController
 @RequestMapping("/api/verification")
 public class VerificationController {
 
 
+    @ApiOperation("获取验证码")
     @GetMapping("/captcha")
     public ResponseData<?> captcha() {
         SpecCaptcha specCaptcha = new SpecCaptcha(100, 45, 5);

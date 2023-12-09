@@ -30,10 +30,14 @@ public class WebServerInitializedListener implements ApplicationListener<WebServ
         String activeProfiles = env.getProperty("spring.profiles.active");
         String ip = InetAddress.getLocalHost().getHostAddress();
         int port = server.getPort();
+        String swaggerPage = "";
+        if ("true".equals(env.getProperty("springfox.documentation.enabled"))) {
+            swaggerPage = String.format("\n\tswagger-ui: http://localhost:%s/swagger-ui/", port);
+        }
         log.info("\n---------------------------------------------------------" +
                 "\n\t启动成功: {}" +
                 "\n\t本地地址: http://localhost:{}" +
-                "\n\t外部地址: http://{}:{}" +
+                "\n\t外部地址: http://{}:{}" + swaggerPage +
                 "\n---------------------------------------------------------\n", activeProfiles, port, ip, port);
     }
 }
