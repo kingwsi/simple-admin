@@ -3,3 +3,5 @@ spring:
     name: simple-admin
   profiles:
     active: dev
+signature:
+  enabled: true

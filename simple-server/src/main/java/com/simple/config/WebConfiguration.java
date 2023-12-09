@@ -5,6 +5,7 @@ import com.simple.handler.AuthFilterHandler;
 import com.simple.handler.RestAuthFilterHandler;
 import com.simple.service.ApiWhitelistService;
 import com.simple.service.ResourceService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ public class WebConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnProperty(value="signature.enabled", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean<RestAuthFilterHandler> signatureFilter() {
         FilterRegistrationBean<RestAuthFilterHandler> filterRegBean = new FilterRegistrationBean<>();
         filterRegBean.setFilter(new RestAuthFilterHandler());
